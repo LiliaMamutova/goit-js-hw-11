@@ -2,7 +2,9 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 
-const gallery = document.querySelector('.gallery');
+const gallery = document.querySelector(".gallery");
+const loader = document.querySelector(".loader");
+
 export const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionsSelector: 'img',
@@ -10,8 +12,8 @@ export const lightbox = new SimpleLightbox('.gallery a', {
   overlayOpacity: 0.5,
 });
 
-export function createGallery(images) {
-  const markup = images.map(({ id, webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+export function createMarkup(images) {
+  return images.map(({ id, webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
     ` <li class="gallery-link" data-id="${id}">
          <a class="gallery-image" href="${largeImageURL}" >
             <img class="gallery-img-item" src="${webformatURL}" alt="${tags}" /></a>
@@ -39,8 +41,16 @@ export function createGallery(images) {
            </div>
       </li>`)
     .join('');
+}
 
-  gallery.insertAdjacentHTML('beforeend', markup);
+export function createGallery(images) {
+  gallery.innerHTML = '';
+  gallery.insertAdjacentHTML('beforeend', createMarkup(images));
+  lightbox.refresh();
+}
+
+export function appendGallery(images) {
+  gallery.insertAdjacentHTML('beforeend', createMarkup(images));
   lightbox.refresh();
 }
 
@@ -49,12 +59,13 @@ export function clearGallery() {
 }
 
 export function showLoader() {
-  const loader = document.querySelector('.loader');
+  if (!loader) return;
   loader.classList.remove('hidden');
 }
 
 export function hideLoader() {
-  const loader = document.querySelector('.loader');
+  if (!loader) return;
   loader.classList.add('hidden');
 }
+
 

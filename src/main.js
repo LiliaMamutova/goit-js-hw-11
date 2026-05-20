@@ -1,36 +1,34 @@
 import 'izitoast/dist/css/iziToast.min.css';
 
-import { clearGallery, createGallery, hideLoader, showLoader } from './js/render-functions.js';
+import { createGallery, hideLoader, showLoader } from './js/render-functions.js';
 import { getImagesByQuery } from './js/pixabay-api.js';
 import iziToast from 'izitoast';
 
 
 const container = document.querySelector('.form');
 
-container.addEventListener("submit", handleSubmit);
+container.addEventListener('submit', handleSubmit);
 
 function handleSubmit(event) {
   event.preventDefault();
 
   const inputValue = event.target.elements[0].value.trim();
 
-  if(!inputValue) {
-    showErrorMessage("Please enter a search word");
+  if (!inputValue) {
+    showErrorMessage('Please enter a search word');
     return;
   }
 
-  clearGallery();
   showLoader();
 
   getImagesByQuery(inputValue)
     .then((data) => {
-
-    if (data.hits.length > 0) {
-      createGallery(data.hits);
-    } else {
-      showErrorMessage('Sorry, there are no images matching your search query. Please try again!');
-    }
-  })
+      if (data.hits.length > 0) {
+        createGallery(data.hits);
+      } else {
+        showErrorMessage('Sorry, there are no images matching your search query. Please try again!');
+      }
+    })
     .catch((error) => {
       showErrorMessage('Something bad happened, try again');
     })
@@ -38,7 +36,7 @@ function handleSubmit(event) {
       hideLoader();
     });
 
-  event.target.elements[0].value = "";
+  event.target.elements[0].value = '';
 }
 
 function showErrorMessage(errorMsg) {
